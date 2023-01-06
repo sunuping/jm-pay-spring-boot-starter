@@ -50,7 +50,6 @@ public class JmWxPayNative implements JmWxPay {
 
     @Override
     public JmPayVO pay(JmPayParam param) {
-        this.initConfig();
         PrepayRequest request = new PrepayRequest();
         request.setAppid(this.config.getAppid());
         request.setMchid(this.config.getMchId());

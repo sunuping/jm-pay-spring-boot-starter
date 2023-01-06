@@ -6,11 +6,11 @@ import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.config.JmWxConfig;
 import org.jm.pay.constant.JmAlipayTypeConstant;
 import org.jm.pay.constant.JmPayTypeConstant;
-import org.jm.pay.constant.JmWxPayTypeConstant;
 import org.jm.pay.factory.JmPayAbstractFactory;
 import org.jm.pay.factory.JmPayFactoryProducer;
 import org.jm.pay.i.JmAlipay;
-import org.jm.pay.i.JmWxPay;
+import org.jm.pay.impl.ali.JmAlipayPc;
+import org.jm.pay.impl.wx.JmWxPayNative;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +23,12 @@ import java.util.UUID;
  */
 @RestController
 public class TestApi {
-    private final JmAlipayConfig jmAlipayConfig;
-    private final JmWxConfig jmWxConfig;
-
+    private final JmWxPayNative jmWxPayNative;
+    private final JmAlipayPc jmAliPayPc;
     @Autowired
-    public TestApi(JmAlipayConfig jmAlipayConfig, JmWxConfig jmWxConfig) {
-        this.jmAlipayConfig = jmAlipayConfig;
-        this.jmWxConfig = jmWxConfig;
+    public TestApi(JmWxPayNative jmWxPayNative, JmAlipayPc jmAliPayPc) {
+        this.jmAliPayPc = jmAliPayPc;
+        this.jmWxPayNative = jmWxPayNative;
     }
 
     public static void main(String[] args) {
@@ -38,9 +37,7 @@ public class TestApi {
 
     @GetMapping("/test/ali/pc/pay")
     public JmPayVO test() {
-        JmPayAbstractFactory payFactory = JmPayFactoryProducer.getFactory(JmPayTypeConstant.ALIPAY);
-        JmAlipay jmAlipayPc = payFactory.getJmAlipay(JmAlipayTypeConstant.ALIPAY_PC, jmAlipayConfig);
-        return jmAlipayPc.pay(this.getJmPayParam());
+        return this.jmAliPayPc.pay(this.getJmPayParam());
     }
 
     private JmPayParam getJmPayParam() {
@@ -54,9 +51,7 @@ public class TestApi {
 
     @GetMapping("/test/wx/native/pay")
     public JmPayVO testWxPcPay() {
-        JmPayAbstractFactory payFactory = JmPayFactoryProducer.getFactory(JmPayTypeConstant.WX_PAY);
-        JmWxPay jmWxPay = payFactory.getJmWxPay(JmWxPayTypeConstant.WX_NATIVE, jmWxConfig);
-        return jmWxPay.pay(this.getJmPayParam());
+        return this.jmWxPayNative.pay(this.getJmPayParam());
     }
 
 }
