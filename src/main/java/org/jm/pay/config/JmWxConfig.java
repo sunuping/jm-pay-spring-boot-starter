@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class JmWxConfig {
     private String apiV3Key;
     private String privateKeyPath;
+    private String privateKey;
     private String mchId;
     private String appid;
     private String mchSerialNumber;

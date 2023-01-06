@@ -40,8 +40,9 @@ public class JmWxPayNative implements JmWxPay {
         // 初始化商户配置
         Config config = new RSAAutoCertificateConfig.Builder()
                 .merchantId(this.config.getMchId())
-                .privateKeyFromPath(this.config.getPrivateKeyPath())
+//                .privateKeyFromPath(this.config.getPrivateKeyPath())
                 .merchantSerialNumber(this.config.getMchSerialNumber())
+                .privateKey(this.config.getPrivateKey())
                 .apiV3Key(this.config.getApiV3Key())
                 .build();
         this.service = new NativePayService.Builder().config(config).build();
