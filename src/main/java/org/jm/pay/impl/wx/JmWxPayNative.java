@@ -90,7 +90,7 @@ public class JmWxPayNative implements JmWxPay {
             case "PAYERROR":
                 //已接收，等待扣款
             case "ACCEPT":
-                return vo.setOrderStatus(JmPayStatusConstant.FAIL);
+                return vo.setOrderStatus(JmPayStatusConstant.FAIL).setPayTime(vo.getSuccessTime());
             default:
         }
         return vo;

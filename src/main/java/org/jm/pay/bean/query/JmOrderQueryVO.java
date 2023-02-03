@@ -8,6 +8,7 @@ import com.wechat.pay.java.service.payments.model.TransactionPayer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -41,4 +42,9 @@ public class JmOrderQueryVO {
      * 第三方订单号
      */
     private String outTradeNo;
+
+    /**
+     * 支付时间
+     */
+    private String payTime;
 }
