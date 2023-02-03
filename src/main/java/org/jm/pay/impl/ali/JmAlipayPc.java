@@ -13,6 +13,7 @@ import org.jm.pay.bean.pay.JmPayVO;
 import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
+import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmAlipay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,24 @@ public class JmAlipayPc implements JmAlipay {
         json.put("out_trade_no", param.getOrderNo());
         request.setBizContent(json.toJSONString());
         try {
-            return new JmOrderQueryVO().setAlipayOrderQueryVO(this.getClient().execute(request).getBody());
+            JSONObject res = JSON.parseObject(this.getClient().execute(request).getBody());
+            JSONObject payRes = res.getJSONObject("alipay_trade_query_response");
+            JmOrderQueryVO vo = new JmOrderQueryVO().setAlipayOrderQueryVO(res);
+            switch (payRes.getString("trade_status")) {
+                //交易创建，等待买家付款
+                case "WAIT_BUYER_PAY":
+                    return vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
+                //未付款交易超时关闭，或支付完成后全额退款
+                case "TRADE_CLOSED":
+                //交易结束，不可退款
+                case "TRADE_FINISHED":
+                    return vo.setOrderStatus(JmPayStatusConstant.FAIL);
+                //交易支付成功
+                case "TRADE_SUCCESS":
+                    return new JmOrderQueryVO().setOrderStatus(JmPayStatusConstant.SUCCESS);
+                default:
+            }
+            return new JmOrderQueryVO();
         } catch (AlipayApiException e) {
             return new JmOrderQueryVO();
         }

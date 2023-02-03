@@ -1,5 +1,6 @@
 package org.jm.pay.bean.query;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wechat.pay.java.service.payments.model.PromotionDetail;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.payments.model.TransactionAmount;
@@ -29,5 +30,11 @@ public class JmOrderQueryVO {
     private Transaction.TradeTypeEnum tradeType;
     private String transactionId;
 
-    private String alipayOrderQueryVO;
+    private JSONObject alipayOrderQueryVO;
+
+
+    /**
+     * 订单状态
+     */
+    private Integer orderStatus;
 }

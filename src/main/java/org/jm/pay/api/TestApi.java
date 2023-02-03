@@ -1,14 +1,11 @@
 package org.jm.pay.api;
 
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayParam;
 import org.jm.pay.bean.pay.JmPayVO;
-import org.jm.pay.config.JmAlipayConfig;
-import org.jm.pay.config.JmWxConfig;
-import org.jm.pay.constant.JmAlipayTypeConstant;
-import org.jm.pay.constant.JmPayTypeConstant;
-import org.jm.pay.factory.JmPayAbstractFactory;
-import org.jm.pay.factory.JmPayFactoryProducer;
-import org.jm.pay.i.JmAlipay;
+import org.jm.pay.bean.query.JmOrderQueryParam;
+import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.impl.ali.JmAlipayPc;
 import org.jm.pay.impl.wx.JmWxPayNative;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +19,11 @@ import java.util.UUID;
  * @author kong
  */
 @RestController
+@Slf4j
 public class TestApi {
     private final JmWxPayNative jmWxPayNative;
     private final JmAlipayPc jmAliPayPc;
+
     @Autowired
     public TestApi(JmWxPayNative jmWxPayNative, JmAlipayPc jmAliPayPc) {
         this.jmAliPayPc = jmAliPayPc;
@@ -52,6 +51,14 @@ public class TestApi {
     @GetMapping("/test/wx/native/pay")
     public JmPayVO testWxPcPay() {
         return this.jmWxPayNative.pay(this.getJmPayParam());
+    }
+
+
+    @GetMapping("/test/ali/pc/query")
+    public void testGetOrderStatus(){
+        JmOrderQueryVO orderQueryVO =  this.jmAliPayPc.query(new JmOrderQueryParam().setOrderNo("20221229181541608406386935861250"));
+//        JmOrderQueryVO orderQueryVO =  this.jmWxPayNative.query(new JmOrderQueryParam().setOrderNo("20230203145421621401695186137089"));
+        log.info("支付宝订单查询{}", JSON.toJSONString(orderQueryVO));
     }
 
 }

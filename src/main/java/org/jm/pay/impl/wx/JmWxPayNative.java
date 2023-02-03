@@ -13,6 +13,7 @@ import org.jm.pay.bean.pay.JmPayVO;
 import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmWxConfig;
+import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmWxPay;
 import org.jm.pay.tools.BeanTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,31 @@ public class JmWxPayNative implements JmWxPay {
         request.setMchid(this.config.getMchId());
         request.setOutTradeNo(param.getOrderNo());
         Transaction transaction = this.getService().queryOrderByOutTradeNo(request);
-        return BeanTools.map(transaction, JmOrderQueryVO.class);
+        JmOrderQueryVO vo = BeanTools.map(transaction, JmOrderQueryVO.class);
+
+        switch (vo.getTradeState().toString()) {
+            //支付成功
+            case "SUCCESS":
+                return vo.setOrderStatus(JmPayStatusConstant.SUCCESS);
+            //未支付
+            case "NOTPAY":
+                //用户支付中
+            case "USERPAYING":
+                return vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
+            //转入退款
+            case "REFUND":
+                //已关闭
+            case "CLOSED":
+                //已撤销(刷卡支付)
+            case "REVOKED":
+                //支付失败(其他原因，如银行返回失败)
+            case "PAYERROR":
+                //已接收，等待扣款
+            case "ACCEPT":
+                return vo.setOrderStatus(JmPayStatusConstant.FAIL);
+            default:
+        }
+        return vo;
     }
 
     public NativePayService getService() {
