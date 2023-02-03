@@ -13,6 +13,7 @@ import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.i.JmAlipay;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
  * @author kong
  */
 @Slf4j
+@Service
 public class JmAlipayH5 implements JmAlipay {
     private AlipayClient client;
     private JmAlipayConfig config;
