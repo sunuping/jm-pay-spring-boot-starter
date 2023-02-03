@@ -21,7 +21,7 @@ public class JmOrderQueryVO {
     private String attach;
     private String bankType;
     private String mchid;
-    private String outTradeNo;
+
     private TransactionPayer payer;
     private List<PromotionDetail> promotionDetail;
     private String successTime;
@@ -37,4 +37,8 @@ public class JmOrderQueryVO {
      * 订单状态
      */
     private Integer orderStatus;
+    /**
+     * 第三方订单号
+     */
+    private String outTradeNo;
 }

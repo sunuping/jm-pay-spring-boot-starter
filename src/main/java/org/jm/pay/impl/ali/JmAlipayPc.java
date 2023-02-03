@@ -91,7 +91,7 @@ public class JmAlipayPc implements JmAlipay {
                     return vo.setOrderStatus(JmPayStatusConstant.FAIL);
                 //交易支付成功
                 case "TRADE_SUCCESS":
-                    return new JmOrderQueryVO().setOrderStatus(JmPayStatusConstant.SUCCESS);
+                    return new JmOrderQueryVO().setOrderStatus(JmPayStatusConstant.SUCCESS).setOutTradeNo(payRes.getString("out_trade_no"));
                 default:
             }
             return new JmOrderQueryVO();
