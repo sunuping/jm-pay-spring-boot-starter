@@ -23,7 +23,11 @@ import java.util.Optional;
 @Slf4j
 public class JmAlipayApp implements JmAlipay {
     private AlipayClient client;
-    private JmAlipayConfig config;
+    private final JmAlipayConfig config;
+
+    public JmAlipayApp(JmAlipayConfig config) {
+        this.config = config;
+    }
 
     @Override
     public void initConfig() {

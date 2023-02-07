@@ -24,7 +24,11 @@ import java.util.Optional;
 @Service
 public class JmAlipayH5 implements JmAlipay {
     private AlipayClient client;
-    private JmAlipayConfig config;
+    private final JmAlipayConfig config;
+    public JmAlipayH5(JmAlipayConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void initConfig() {
         this.client = new DefaultAlipayClient(config.getGatewayUrl(), config.getAppid(),
