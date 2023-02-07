@@ -17,4 +17,9 @@ public class JmPayCallbackVO {
      * 商家订单号
      */
     private String outTradeNo;
+
+    /**
+     * 支付平台 wx ali
+     */
+    private String payPlatform;
 }

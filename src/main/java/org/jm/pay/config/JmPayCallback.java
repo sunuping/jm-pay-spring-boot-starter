@@ -7,6 +7,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jm.pay.bean.pay.JmPayCallbackVO;
+import org.jm.pay.constant.JmPayPlatformConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,9 @@ public class JmPayCallback {
     }
 
     public JmPayCallbackVO getJmPayCallback(String callbackStr) throws AlipayApiException, GeneralSecurityException, IOException {
-        JmPayCallbackVO callback  = this.aliPayCallback(callbackStr);
-        if (StringUtils.isBlank(callback.getOrderNo())){
-           return this.wxPayCallback(callbackStr);
+        JmPayCallbackVO callback = this.aliPayCallback(callbackStr);
+        if (StringUtils.isBlank(callback.getOrderNo())) {
+            return this.wxPayCallback(callbackStr);
         }
         return callback;
     }
@@ -51,7 +52,7 @@ public class JmPayCallback {
         String decryptResource = aesUtil.decryptToString(associatedData.getBytes(StandardCharsets.UTF_8), nonce.getBytes(StandardCharsets.UTF_8), ciphertext);
         log.debug("微信回调数据:{}", decryptResource);
         JSONObject resourceJson = JSON.parseObject(decryptResource);
-        return new JmPayCallbackVO().setOrderNo(resourceJson.getString("out_trade_no"))
+        return new JmPayCallbackVO().setPayPlatform(JmPayPlatformConstant.WX).setOrderNo(resourceJson.getString("out_trade_no"))
                 .setOutTradeNo(resourceJson.getString("transaction_id"));
     }
 
@@ -71,7 +72,10 @@ public class JmPayCallback {
                 log.debug("回调数据转为map {}", JSON.toJSONString(dataMap));
             }
         }
-        return new JmPayCallbackVO().setOutTradeNo(dataMap.get("trade_no")).setOrderNo(dataMap.get("out_trade_no"));
+        return new JmPayCallbackVO()
+                .setPayPlatform(JmPayPlatformConstant.ALI)
+                .setOutTradeNo(dataMap.get("trade_no"))
+                .setOrderNo(dataMap.get("out_trade_no"));
     }
 
 }
