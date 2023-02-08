@@ -22,4 +22,9 @@ public class JmPayCallbackVO {
      * 支付平台 wx ali
      */
     private String payPlatform;
+
+    /**
+     * 支付时间
+     */
+    private String payTime;
 }
