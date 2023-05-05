@@ -2,8 +2,6 @@ package org.jm.pay.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.internal.util.AlipaySignature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jm.pay.bean.pay.JmPayCallbackVO;
@@ -33,7 +31,7 @@ public class JmPayCallback {
         this.jmAlipayConfig = jmAlipayConfig;
     }
 
-    public JmPayCallbackVO getJmPayCallback(String callbackStr) throws AlipayApiException, GeneralSecurityException, IOException {
+    public JmPayCallbackVO getJmPayCallback(String callbackStr) {
         JmPayCallbackVO callback = this.aliPayCallback(callbackStr);
         if (StringUtils.isBlank(callback.getOrderNo())) {
             return this.wxPayCallback(callbackStr);
@@ -67,32 +65,42 @@ public class JmPayCallback {
         String[] dataArr = callbackStr.split("&");
         for (String item : dataArr) {
             String[] arr = item.split("=");
-            if (arr.length == 2) {
-                dataMap.put(arr[0], Optional.ofNullable(arr[1]).orElse(""));
-            }
+            log.debug("item {}={}", arr[0], arr[1]);
+            dataMap.put(arr[0], Optional.ofNullable(arr[1]).orElse(""));
         }
 
-        boolean is;
-        try {
-            is = AlipaySignature.rsaCheckV1(dataMap, jmAlipayConfig.getAlipayPublicKey(), jmAlipayConfig.getCharset(), jmAlipayConfig.getSignType());
-        } catch (AlipayApiException e) {
-            log.error("非支付宝支付回调");
-            return new JmPayCallbackVO();
-        }
-        if (is) {
-            if (log.isDebugEnabled()) {
-                log.debug("回调数据转为map {}", JSON.toJSONString(dataMap));
-            }
-            return new JmPayCallbackVO()
-                    .setPayPlatform(JmPayPlatformConstant.ALI)
-                    //商家订单号
-                    .setOutTradeNo(dataMap.get("trade_no"))
-                    //订单号
-                    .setOrderNo(dataMap.get("out_trade_no"))
-                    //支付时间
-                    .setPayTime(dataMap.get("gmt_payment"));
-        }
-        return new JmPayCallbackVO();
+        log.debug(JSON.toJSONString(dataMap));
+
+        return new JmPayCallbackVO()
+                .setPayPlatform(JmPayPlatformConstant.ALI)
+                //商家订单号
+                .setOutTradeNo(dataMap.get("trade_no"))
+                //订单号
+                .setOrderNo(dataMap.get("out_trade_no"))
+                //支付时间
+                .setPayTime(dataMap.get("gmt_payment"));
+
+//        boolean is;
+//        try {
+//            is = AlipaySignature.rsaCheckV1(dataMap, jmAlipayConfig.getAlipayPublicKey(), jmAlipayConfig.getCharset(), jmAlipayConfig.getSignType());
+//        } catch (AlipayApiException e) {
+//            log.error("支付宝支付回调效验失败 ", e);
+//            return new JmPayCallbackVO();
+//        }
+//        if (is) {
+//            if (log.isDebugEnabled()) {
+//                log.debug("回调数据转为map {}", JSON.toJSONString(dataMap));
+//            }
+//            return new JmPayCallbackVO()
+//                    .setPayPlatform(JmPayPlatformConstant.ALI)
+//                    //商家订单号
+//                    .setOutTradeNo(dataMap.get("trade_no"))
+//                    //订单号
+//                    .setOrderNo(dataMap.get("out_trade_no"))
+//                    //支付时间
+//                    .setPayTime(dataMap.get("gmt_payment"));
+//        }
+//        return new JmPayCallbackVO();
     }
 
 }
