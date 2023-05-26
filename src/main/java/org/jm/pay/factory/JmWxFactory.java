@@ -28,7 +28,7 @@ public class JmWxFactory extends JmPayAbstractFactory {
             case JmWxPayTypeConstant.WX_NATIVE:
                 return new JmWxPayNative(jmWxConfig);
             default:
+                return null;
         }
-        return null;
     }
 }

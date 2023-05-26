@@ -24,8 +24,9 @@ public class JmAlipayFactory extends JmPayAbstractFactory {
             case JmAlipayTypeConstant.ALIPAY_APP:
                 return new JmAlipayApp(config);
             default:
+                return null;
         }
-        return null;
+
     }
 
     @Override
