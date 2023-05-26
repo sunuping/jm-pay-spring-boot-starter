@@ -1,7 +1,5 @@
 package org.jm.pay.impl.wx;
 
-import com.wechat.pay.java.core.Config;
-import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import com.wechat.pay.java.service.payments.h5.H5Service;
 import com.wechat.pay.java.service.payments.h5.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -33,15 +31,7 @@ public class JmWxPayH5 implements JmWxPay {
 
     @Override
     public void initConfig() {
-        // 初始化商户配置
-        Config config = new RSAAutoCertificateConfig.Builder()
-                .merchantId(this.config.getMchId())
-//                .privateKeyFromPath(this.config.getPrivateKeyPath())
-                .merchantSerialNumber(this.config.getMchSerialNumber())
-                .privateKey(this.config.getPrivateKey())
-                .apiV3Key(this.config.getApiV3Key())
-                .build();
-        this.service = new H5Service.Builder().config(config).build();
+        this.service = new H5Service.Builder().config(this.config.getConfig()).build();
     }
 
     @Override

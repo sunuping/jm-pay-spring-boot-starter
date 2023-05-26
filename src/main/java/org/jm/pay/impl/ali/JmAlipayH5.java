@@ -2,8 +2,6 @@ package org.jm.pay.impl.ali;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class JmAlipayH5 implements JmAlipay {
-    private AlipayClient client;
     private final JmAlipayConfig config;
     public JmAlipayH5(JmAlipayConfig config) {
         this.config = config;
@@ -31,9 +28,7 @@ public class JmAlipayH5 implements JmAlipay {
 
     @Override
     public void initConfig() {
-        this.client = new DefaultAlipayClient(config.getGatewayUrl(), config.getAppid(),
-                config.getRsaPrivateKey(), config.getFormat(), config.getCharset(),
-                config.getAlipayPublicKey(), config.getSignType());
+
     }
 
     @Override
@@ -53,7 +48,7 @@ public class JmAlipayH5 implements JmAlipay {
         request.setReturnUrl(Optional.ofNullable(param.getReturnUrl()).orElse(config.getReturnUrl()));
         try {
             // 调用SDK生成表单
-            return new JmPayVO().setResponse(this.getClient().pageExecute(request).getBody());
+            return new JmPayVO().setResponse(this.config.getClient().pageExecute(request).getBody());
         } catch (AlipayApiException e) {
             log.error("", e);
             return new JmPayVO().setErr(JSON.toJSONString(e));
@@ -65,10 +60,5 @@ public class JmAlipayH5 implements JmAlipay {
         return null;
     }
 
-    public AlipayClient getClient() {
-        if (client == null) {
-            this.initConfig();
-        }
-        return this.client;
-    }
+
 }

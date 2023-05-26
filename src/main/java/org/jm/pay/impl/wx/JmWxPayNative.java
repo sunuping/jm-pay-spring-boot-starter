@@ -1,7 +1,5 @@
 package org.jm.pay.impl.wx;
 
-import com.wechat.pay.java.core.Config;
-import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.payments.nativepay.NativePayService;
 import com.wechat.pay.java.service.payments.nativepay.model.Amount;
@@ -38,15 +36,7 @@ public class JmWxPayNative implements JmWxPay {
 
     @Override
     public void initConfig() {
-        // 初始化商户配置
-        Config config = new RSAAutoCertificateConfig.Builder()
-                .merchantId(this.config.getMchId())
-//                .privateKeyFromPath(this.config.getPrivateKeyPath())
-                .merchantSerialNumber(this.config.getMchSerialNumber())
-                .privateKey(this.config.getPrivateKey())
-                .apiV3Key(this.config.getApiV3Key())
-                .build();
-        this.service = new NativePayService.Builder().config(config).build();
+        this.service = new NativePayService.Builder().config(this.config.getConfig()).build();
     }
 
     @Override

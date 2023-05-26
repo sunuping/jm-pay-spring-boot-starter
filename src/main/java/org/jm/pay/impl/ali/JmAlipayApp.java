@@ -2,8 +2,6 @@ package org.jm.pay.impl.ali;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
@@ -22,7 +20,6 @@ import java.util.Optional;
  */
 @Slf4j
 public class JmAlipayApp implements JmAlipay {
-    private AlipayClient client;
     private final JmAlipayConfig config;
 
     public JmAlipayApp(JmAlipayConfig config) {
@@ -31,9 +28,7 @@ public class JmAlipayApp implements JmAlipay {
 
     @Override
     public void initConfig() {
-        this.client = new DefaultAlipayClient(config.getGatewayUrl(), config.getAppid(),
-                config.getRsaPrivateKey(), config.getFormat(), config.getCharset(),
-                config.getAlipayPublicKey(), config.getSignType());
+
     }
 
     @Override
@@ -50,7 +45,7 @@ public class JmAlipayApp implements JmAlipay {
         // 设置异步通知地址
         request.setNotifyUrl(Optional.ofNullable(param.getNotifyUrl()).orElse(config.getNotifyUrl()));
         try {
-            AlipayTradeAppPayResponse response = this.getClient().sdkExecute(request);
+            AlipayTradeAppPayResponse response = this.config.getClient().sdkExecute(request);
             return new JmPayVO().setResponse(response.getBody());
         } catch (AlipayApiException e) {
             log.error("", e);
@@ -61,12 +56,5 @@ public class JmAlipayApp implements JmAlipay {
     @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {
         return null;
-    }
-
-    public AlipayClient getClient() {
-        if (client == null) {
-            this.initConfig();
-        }
-        return this.client;
     }
 }

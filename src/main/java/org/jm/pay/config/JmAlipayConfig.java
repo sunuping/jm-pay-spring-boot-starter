@@ -1,5 +1,7 @@
 package org.jm.pay.config;
 
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -49,4 +51,14 @@ public class JmAlipayConfig {
     private String signType;
 
 
+    private AlipayClient client;
+
+    public AlipayClient getClient() {
+        if (client == null) {
+            this.client = new DefaultAlipayClient(this.gatewayUrl, this.appid,
+                    this.rsaPrivateKey, this.format, this.charset,
+                    this.alipayPublicKey, this.signType);
+        }
+        return client;
+    }
 }
