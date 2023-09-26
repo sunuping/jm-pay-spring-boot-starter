@@ -44,13 +44,14 @@ public class JmWxPayH5 implements JmWxPay {
         request.setNotifyUrl(this.config.getNotifyUrl());
         Amount amount = new Amount();
         amount.setTotal(param.getAmount().multiply(new BigDecimal("100")).intValue());
+        amount.setCurrency("CNY");
         request.setAmount(amount);
         SceneInfo sceneInfo = new SceneInfo();
-        sceneInfo.setPayerClientIp("118.116.104.50");
+        sceneInfo.setPayerClientIp(param.getPayerClientIp());
         H5Info h5Info = new H5Info();
         //场景类型
         //示例值：iOS, Android, Wap
-        h5Info.setType("Android");
+        h5Info.setType("Wap");
         sceneInfo.setH5Info(h5Info);
         request.setSceneInfo(sceneInfo);
 

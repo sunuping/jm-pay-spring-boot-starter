@@ -45,4 +45,9 @@ public class JmPayParam {
      */
     private String returnUrl;
 
+    /**
+     * 客户端ip
+     */
+    private String payerClientIp;
+
 }

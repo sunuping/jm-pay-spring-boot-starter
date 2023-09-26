@@ -26,8 +26,9 @@
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-java</artifactId>
-            <version>0.2.4</version>
+            <version>0.2.11</version>
         </dependency>
+
         <!--            谷歌并发包-->
         <dependency>
             <groupId>com.google.guava</groupId>
