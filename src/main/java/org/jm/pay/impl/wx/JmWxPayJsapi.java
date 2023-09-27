@@ -1,7 +1,8 @@
 package org.jm.pay.impl.wx;
 
-import com.wechat.pay.java.service.payments.h5.H5Service;
-import com.wechat.pay.java.service.payments.h5.model.*;
+import com.alibaba.fastjson.JSON;
+import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
+import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import org.jm.pay.bean.pay.JmPayParam;
 import org.jm.pay.bean.pay.JmPayVO;
@@ -21,18 +22,18 @@ import java.math.BigDecimal;
  * @author kong
  */
 @Service
-public class JmWxPayH5 implements JmWxPay {
+public class JmWxPayJsapi implements JmWxPay {
     private final JmWxConfig config;
-    private H5Service service;
+    private JsapiServiceExtension service;
 
     @Autowired
-    public JmWxPayH5(JmWxConfig config) {
+    public JmWxPayJsapi(JmWxConfig config) {
         this.config = config;
     }
 
     @Override
     public void initConfig() {
-        this.service = new H5Service.Builder().config(this.config.getConfig()).build();
+        this.service = new JsapiServiceExtension.Builder().config(this.config.getConfig()).signType("RSA").build();
     }
 
     @Override
@@ -47,16 +48,13 @@ public class JmWxPayH5 implements JmWxPay {
         amount.setTotal(param.getAmount().multiply(new BigDecimal("100")).intValue());
         amount.setCurrency("CNY");
         request.setAmount(amount);
-        SceneInfo sceneInfo = new SceneInfo();
-        sceneInfo.setPayerClientIp(param.getPayerClientIp());
-        H5Info h5Info = new H5Info();
-        //场景类型
-        //示例值：iOS, Android, Wap
-        h5Info.setType("Wap");
-        sceneInfo.setH5Info(h5Info);
-        request.setSceneInfo(sceneInfo);
+        //支付者信息
+        Payer payer = new Payer();
+        payer.setOpenid(param.getOpenid());
+        request.setPayer(payer);
 
-        return new JmPayVO().setResponse(this.getService().prepay(request).getH5Url());
+        PrepayWithRequestPaymentResponse prepayWithRequestPaymentResponse = this.getService().prepayWithRequestPayment(request);
+        return new JmPayVO().setResponse(JSON.toJSONString(prepayWithRequestPaymentResponse));
     }
 
 
@@ -93,7 +91,7 @@ public class JmWxPayH5 implements JmWxPay {
         return vo;
     }
 
-    public H5Service getService() {
+    public JsapiServiceExtension getService() {
         if (this.service == null) {
             this.initConfig();
         }

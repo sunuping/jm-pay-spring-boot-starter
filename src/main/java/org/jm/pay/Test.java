@@ -8,7 +8,7 @@ import org.jm.pay.constant.JmPayTypeConstant;
 import org.jm.pay.constant.JmWxPayTypeConstant;
 import org.jm.pay.factory.JmPayFactoryProducer;
 import org.jm.pay.factory.JmWxFactory;
-import org.jm.pay.impl.wx.JmWxPayH5;
+import org.jm.pay.impl.wx.JmWxPayJsapi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -36,13 +36,20 @@ public class Test {
         JmPayParam jmPayParam = new JmPayParam()
                 .setAmount(new BigDecimal("0.01"))
                 .setDesc("")
+                .setPayerClientIp("218.88.68.49")
                 .setOrderNo(orderNo)
                 .setDesc("会员升级")
+                .setOpenid("ogcPSwjVvWzMsoerRNZedarsGvkU")
                 .setOrderName("会员升级");
 
         JmWxFactory jmWxFactory = (JmWxFactory) JmPayFactoryProducer.getFactory(JmPayTypeConstant.WX_PAY);
         assert jmWxFactory != null;
-        JmWxPayH5 jmWxPayH5 = (JmWxPayH5) jmWxFactory.getJmWxPay(JmWxPayTypeConstant.WX_H5, this.jmWxConfig);
+//        JmWxPayH5 jmWxPayH5 = (JmWxPayH5) jmWxFactory.getJmWxPay(JmWxPayTypeConstant.WX_H5, this.jmWxConfig);
+//        System.out.println(jmWxPayH5.pay(jmPayParam).getResponse());
+
+        JmWxPayJsapi jmWxPayJsapi = (JmWxPayJsapi) jmWxFactory.getJmWxPay(JmWxPayTypeConstant.WX_JSAPI, this.jmWxConfig);
+        System.out.println(jmWxPayJsapi.pay(jmPayParam).getResponse());
+
     }
 
 }

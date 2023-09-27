@@ -50,4 +50,6 @@ public class JmPayParam {
      */
     private String payerClientIp;
 
+    private String openid;
+
 }
