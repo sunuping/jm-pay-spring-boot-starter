@@ -1,4 +1,5 @@
 # jm-pay
+
 java spring boot
 集成微信和支付宝支付sdk<br>
 已完成微信native h5<br>
@@ -7,9 +8,12 @@ java spring boot
 
 
 wx jsapi查询订单状态
+```java
 JmOrderQueryVO jmOrderQueryVO = jmWxPayJsapi.query(new JmOrderQueryParam().setOrderNo("订单号").setPayType(JmWxPayTypeConstant.WX_JSAPI));
+```
 
 wx jsapi 下单
+```java
 JmPayParam jmPayParam = new JmPayParam()
                 .setOrderNo("订单号")
                 .setOrderName("订单名称")
@@ -18,5 +22,7 @@ JmPayParam jmPayParam = new JmPayParam()
                 .setPayerClientIp(ip)
                 .setOpenid("微信openid");
  JmPayVO jmPayVO = this.jmWxPayJsapi.pay(jmPayParam);
+```
+
 
  
