@@ -59,6 +59,10 @@ public class JmWxPayH5 implements JmWxPay {
         return new JmPayVO().setResponse(this.getService().prepay(request).getH5Url());
     }
 
+    @Override
+    public Boolean close(String oid) {
+        return null;
+    }
 
     @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {

@@ -1,7 +1,9 @@
 package org.jm.pay;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayParam;
+import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.config.JmWxConfig;
 import org.jm.pay.constant.JmPayTypeConstant;
@@ -48,7 +50,16 @@ public class Test {
 //        System.out.println(jmWxPayH5.pay(jmPayParam).getResponse());
 
         JmWxPayJsapi jmWxPayJsapi = (JmWxPayJsapi) jmWxFactory.getJmWxPay(JmWxPayTypeConstant.WX_JSAPI, this.jmWxConfig);
-        System.out.println(jmWxPayJsapi.pay(jmPayParam).getResponse());
+
+//        System.out.println(jmWxPayJsapi.pay(jmPayParam).getResponse());
+
+//        System.out.println(jmWxPayJsapi.close("84185ab11c474d078eb620952803ce5e"));
+        System.out.println(JSON.toJSONString(jmWxPayJsapi.query(new JmOrderQueryParam().setOrderNo("84185ab11c474d078eb620952803ce5e").setPayType(JmWxPayTypeConstant.WX_JSAPI))));
+
+    }
+
+    public void testClose(){
+        //84185ab11c474d078eb620952803ce5e
 
     }
 

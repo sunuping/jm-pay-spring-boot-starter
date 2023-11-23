@@ -54,6 +54,11 @@ public class JmWxPayNative implements JmWxPay {
     }
 
     @Override
+    public Boolean close(String oid) {
+        return null;
+    }
+
+    @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {
         QueryOrderByOutTradeNoRequest request = new QueryOrderByOutTradeNoRequest();
         request.setMchid(this.config.getMchId());

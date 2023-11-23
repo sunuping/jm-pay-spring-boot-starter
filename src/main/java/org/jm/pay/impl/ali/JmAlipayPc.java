@@ -65,6 +65,11 @@ public class JmAlipayPc implements JmAlipay {
     }
 
     @Override
+    public Boolean close(String oid) {
+        return null;
+    }
+
+    @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         JSONObject json = new JSONObject();

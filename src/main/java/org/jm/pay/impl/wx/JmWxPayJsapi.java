@@ -57,6 +57,14 @@ public class JmWxPayJsapi implements JmWxPay {
         return new JmPayVO().setResponse(JSON.toJSONString(prepayWithRequestPaymentResponse));
     }
 
+    @Override
+    public Boolean close(String oid) {
+        CloseOrderRequest request = new CloseOrderRequest();
+        request.setMchid(this.config.getMchId());
+        request.setOutTradeNo(oid);
+        this.getService().closeOrder(request);
+        return true;
+    }
 
     @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {

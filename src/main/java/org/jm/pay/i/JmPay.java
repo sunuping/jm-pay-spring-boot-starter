@@ -19,5 +19,7 @@ public interface JmPay {
      */
     JmOrderQueryVO query(JmOrderQueryParam param);
 
+    Boolean close(String oid);
+
     void initConfig();
 }

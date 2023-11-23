@@ -56,6 +56,11 @@ public class JmAlipayH5 implements JmAlipay {
     }
 
     @Override
+    public Boolean close(String oid) {
+        return null;
+    }
+
+    @Override
     public JmOrderQueryVO query(JmOrderQueryParam param) {
         return null;
     }
