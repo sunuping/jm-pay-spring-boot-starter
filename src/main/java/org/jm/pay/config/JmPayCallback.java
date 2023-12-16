@@ -3,7 +3,6 @@ package org.jm.pay.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.jm.pay.bean.pay.JmPayCallbackVO;
 import org.jm.pay.constant.JmPayPlatformConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author kong
@@ -23,23 +20,13 @@ import java.util.Optional;
 @Slf4j
 public class JmPayCallback {
     private final JmWxConfig jmWxConfig;
-    private final JmAlipayConfig jmAlipayConfig;
 
     @Autowired
-    public JmPayCallback(JmWxConfig jmWxConfig, JmAlipayConfig jmAlipayConfig) {
+    public JmPayCallback(JmWxConfig jmWxConfig) {
         this.jmWxConfig = jmWxConfig;
-        this.jmAlipayConfig = jmAlipayConfig;
     }
 
-    public JmPayCallbackVO getJmPayCallback(String callbackStr) {
-        JmPayCallbackVO callback = this.aliPayCallback(callbackStr);
-        if (StringUtils.isBlank(callback.getOrderNo())) {
-            return this.wxPayCallback(callbackStr);
-        }
-        return callback;
-    }
-
-    private JmPayCallbackVO wxPayCallback(String callbackStr) {
+    public JmPayCallbackVO wxPayCallback(String callbackStr) {
         JSONObject wxCallbackDataJson = JSON.parseObject(callbackStr);
         JSONObject resource = wxCallbackDataJson.getJSONObject("resource");
         String ciphertext = resource.getString("ciphertext");
@@ -60,25 +47,17 @@ public class JmPayCallback {
                 .setOutTradeNo(resourceJson.getString("transaction_id")).setPayTime(resourceJson.getString("success_time"));
     }
 
-    private JmPayCallbackVO aliPayCallback(String callbackStr) {
-        Map<String, String> dataMap = new HashMap<>(100);
-        String[] dataArr = callbackStr.split("&");
-        for (String item : dataArr) {
-            String[] arr = item.split("=");
-            log.debug("item {}={}", arr[0], arr[1]);
-            dataMap.put(arr[0], Optional.ofNullable(arr[1]).orElse(""));
-        }
-
-        log.debug(JSON.toJSONString(dataMap));
+    public JmPayCallbackVO aliPayCallback(Map<String, String[]> requestParams) {
 
         return new JmPayCallbackVO()
                 .setPayPlatform(JmPayPlatformConstant.ALI)
                 //商家订单号
-                .setOutTradeNo(dataMap.get("trade_no"))
+                .setOutTradeNo(requestParams.get("trade_no")[0])
                 //订单号
-                .setOrderNo(dataMap.get("out_trade_no"))
+                .setOrderNo(requestParams.get("out_trade_no")[0])
                 //支付时间
-                .setPayTime(dataMap.get("gmt_payment"));
+                .setPayTime(requestParams.get("gmt_payment")[0]);
+    }
 
 //        boolean is;
 //        try {
@@ -101,6 +80,5 @@ public class JmPayCallback {
 //                    .setPayTime(dataMap.get("gmt_payment"));
 //        }
 //        return new JmPayCallbackVO();
-    }
 
 }
