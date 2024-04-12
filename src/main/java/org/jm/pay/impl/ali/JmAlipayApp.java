@@ -1,6 +1,7 @@
 package org.jm.pay.impl.ali;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
@@ -12,6 +13,7 @@ import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.i.JmAlipay;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import java.util.Optional;
  * @author kong
  */
 @Slf4j
+@Service
 public class JmAlipayApp implements JmAlipay {
     private final JmAlipayConfig config;
 
@@ -35,15 +38,13 @@ public class JmAlipayApp implements JmAlipay {
     public JmPayVO pay(JmPayParam param) {
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody(param.getDesc());
+        //【描述】订单标题 注意：不可使用特殊字符，如 /，=，& 等。
         model.setSubject(param.getOrderName());
+        //订单编号 由商家自定义，64个字符以内，仅支持字母、数字、下划线且需保证在商户端不重复
         model.setOutTradeNo(param.getOrderNo());
-        model.setTimeoutExpress("30m");
+        //订单总金额 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]，金额不能为0
         model.setTotalAmount(param.getAmount().toString());
-        model.setProductCode("QUICK_MSECURITY_PAY");
         request.setBizModel(model);
-        // 设置异步通知地址
-        request.setNotifyUrl(Optional.ofNullable(param.getNotifyUrl()).orElse(config.getNotifyUrl()));
         try {
             AlipayTradeAppPayResponse response = this.config.getClient().sdkExecute(request);
             return new JmPayVO().setResponse(response.getBody());
