@@ -13,8 +13,6 @@ import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmAlipay;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -22,11 +20,9 @@ import java.util.Optional;
  * @author kong
  */
 @Slf4j
-@Service
 public class JmAlipayPc implements JmAlipay {
     private final JmAlipayConfig config;
 
-    @Autowired
     public JmAlipayPc(JmAlipayConfig config) {
         this.config = config;
     }
@@ -85,7 +81,7 @@ public class JmAlipayPc implements JmAlipay {
                     return vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
                 //未付款交易超时关闭，或支付完成后全额退款
                 case "TRADE_CLOSED":
-                //交易结束，不可退款
+                    //交易结束，不可退款
                 case "TRADE_FINISHED":
                     return vo.setOrderStatus(JmPayStatusConstant.FAIL);
                 //交易支付成功

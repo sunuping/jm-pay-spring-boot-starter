@@ -4,12 +4,10 @@ import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author kong
  */
-@Component
 @ConfigurationProperties(prefix = "jm.wx")
 @Data
 public class JmWxConfig {

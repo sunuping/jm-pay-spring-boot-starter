@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author kong
  */
 @SpringBootApplication
-public class Application {
+public class JmPaySpringBootStarter {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(JmPaySpringBootStarter.class,args);
     }
 }

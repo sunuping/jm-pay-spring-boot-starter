@@ -14,8 +14,6 @@ import org.jm.pay.config.JmWxConfig;
 import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmWxPay;
 import org.jm.pay.tools.BeanTools;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
@@ -23,11 +21,9 @@ import java.math.BigDecimal;
  * @author kong
  */
 @Slf4j
-@Service
 public class JmWxPayNative implements JmWxPay {
     private final JmWxConfig config;
 
-    @Autowired
     public JmWxPayNative(JmWxConfig config) {
         this.config = config;
     }

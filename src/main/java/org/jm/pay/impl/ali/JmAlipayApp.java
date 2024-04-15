@@ -1,7 +1,6 @@
 package org.jm.pay.impl.ali;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
@@ -13,15 +12,11 @@ import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.i.JmAlipay;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * @author kong
  */
 @Slf4j
-@Service
 public class JmAlipayApp implements JmAlipay {
     private final JmAlipayConfig config;
 
