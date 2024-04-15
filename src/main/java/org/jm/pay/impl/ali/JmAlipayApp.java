@@ -8,8 +8,6 @@ import com.alipay.api.response.AlipayTradeAppPayResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayParam;
 import org.jm.pay.bean.pay.JmPayVO;
-import org.jm.pay.bean.query.JmOrderQueryParam;
-import org.jm.pay.bean.query.JmOrderQueryVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.i.JmAlipay;
 
@@ -17,16 +15,12 @@ import org.jm.pay.i.JmAlipay;
  * @author kong
  */
 @Slf4j
-public class JmAlipayApp implements JmAlipay {
+public class JmAlipayApp extends JmBaseAlipay implements JmAlipay {
     private final JmAlipayConfig config;
 
     public JmAlipayApp(JmAlipayConfig config) {
+        super(config);
         this.config = config;
-    }
-
-    @Override
-    public void initConfig() {
-
     }
 
     @Override
@@ -49,13 +43,4 @@ public class JmAlipayApp implements JmAlipay {
         }
     }
 
-    @Override
-    public Boolean close(String oid) {
-        return null;
-    }
-
-    @Override
-    public JmOrderQueryVO query(JmOrderQueryParam param) {
-        return null;
-    }
 }
