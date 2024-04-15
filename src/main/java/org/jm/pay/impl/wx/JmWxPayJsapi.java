@@ -1,6 +1,6 @@
 package org.jm.pay.impl.wx;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -70,29 +70,20 @@ public class JmWxPayJsapi implements JmWxPay {
         Transaction transaction = this.getService().queryOrderByOutTradeNo(request);
         JmOrderQueryVO vo = BeanTools.map(transaction, JmOrderQueryVO.class);
 
-        switch (vo.getTradeState().toString()) {
+        return switch (vo.getTradeState().toString()) {
             //支付成功
-            case "SUCCESS":
-                return vo.setOrderStatus(JmPayStatusConstant.SUCCESS);
+            case "SUCCESS" -> vo.setOrderStatus(JmPayStatusConstant.SUCCESS);
             //未支付
-            case "NOTPAY":
-                //用户支付中
-            case "USERPAYING":
-                return vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
+            //用户支付中
+            case "NOTPAY", "USERPAYING" -> vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
             //转入退款
-            case "REFUND":
-                //已关闭
-            case "CLOSED":
-                //已撤销(刷卡支付)
-            case "REVOKED":
-                //支付失败(其他原因，如银行返回失败)
-            case "PAYERROR":
-                //已接收，等待扣款
-            case "ACCEPT":
-                return vo.setOrderStatus(JmPayStatusConstant.FAIL).setPayTime(vo.getSuccessTime());
-            default:
-        }
-        return vo;
+            //已关闭
+            //已撤销(刷卡支付)
+            //支付失败(其他原因，如银行返回失败)
+            //已接收，等待扣款
+            case "REFUND", "CLOSED", "REVOKED", "PAYERROR", "ACCEPT" -> vo.setOrderStatus(JmPayStatusConstant.FAIL).setPayTime(vo.getSuccessTime());
+            default -> vo;
+        };
     }
 
     public JsapiServiceExtension getService() {

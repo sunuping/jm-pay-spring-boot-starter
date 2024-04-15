@@ -1,6 +1,6 @@
 package org.jm.pay.bean.query;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.wechat.pay.java.service.payments.model.PromotionDetail;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.payments.model.TransactionAmount;

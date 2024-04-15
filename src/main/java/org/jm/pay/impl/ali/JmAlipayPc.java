@@ -1,7 +1,7 @@
 package org.jm.pay.impl.ali;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
@@ -55,7 +55,7 @@ public class JmAlipayPc implements JmAlipay {
             return new JmPayVO().setResponse(res);
         } catch (AlipayApiException e) {
 
-            return new JmPayVO().setErr(JSON.toJSONString(e));
+            return new JmPayVO().setErr(com.alibaba.fastjson2.JSON.toJSONString(e));
         }
 
     }
@@ -75,24 +75,19 @@ public class JmAlipayPc implements JmAlipay {
             JSONObject res = JSON.parseObject(this.config.getClient().execute(request).getBody());
             JSONObject payRes = res.getJSONObject("alipay_trade_query_response");
             JmOrderQueryVO vo = new JmOrderQueryVO().setAlipayOrderQueryVO(res);
-            switch (payRes.getString("trade_status")) {
+            return switch (payRes.getString("trade_status")) {
                 //交易创建，等待买家付款
-                case "WAIT_BUYER_PAY":
-                    return vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
+                case "WAIT_BUYER_PAY" -> vo.setOrderStatus(JmPayStatusConstant.NOT_PAY);
                 //未付款交易超时关闭，或支付完成后全额退款
-                case "TRADE_CLOSED":
-                    //交易结束，不可退款
-                case "TRADE_FINISHED":
-                    return vo.setOrderStatus(JmPayStatusConstant.FAIL);
+                //交易结束，不可退款
+                case "TRADE_CLOSED", "TRADE_FINISHED" -> vo.setOrderStatus(JmPayStatusConstant.FAIL);
                 //交易支付成功
-                case "TRADE_SUCCESS":
-                    return new JmOrderQueryVO()
-                            .setOrderStatus(JmPayStatusConstant.SUCCESS)
-                            .setOutTradeNo(payRes.getString("out_trade_no"))
-                            .setPayTime(payRes.getString("send_pay_date"));
-                default:
-            }
-            return new JmOrderQueryVO();
+                case "TRADE_SUCCESS" -> new JmOrderQueryVO()
+                        .setOrderStatus(JmPayStatusConstant.SUCCESS)
+                        .setOutTradeNo(payRes.getString("out_trade_no"))
+                        .setPayTime(payRes.getString("send_pay_date"));
+                default -> new JmOrderQueryVO();
+            };
         } catch (AlipayApiException e) {
             return new JmOrderQueryVO();
         }
