@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.jm</groupId>
     <artifactId>jm-pay-spring-boot-starter</artifactId>
-    <version>4.0</version>
+    <version>4.0.1</version>
     <name>jm-pay-spring-boot-starter</name>
     <description>jm-pay-spring-boot-starter</description>
     <properties>
