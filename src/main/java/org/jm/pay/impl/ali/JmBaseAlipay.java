@@ -64,7 +64,7 @@ public class JmBaseAlipay implements JmAlipay {
     public Boolean close(String oid) {
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
         JSONObject bizContent = new JSONObject();
-        bizContent.put("trade_no", "2013112611001004680073956707");
+        bizContent.put("trade_no", oid);
         request.setBizContent(bizContent.toString());
         AlipayTradeCloseResponse response = null;
         try {
