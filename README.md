@@ -1,10 +1,16 @@
 # jm-pay-spring-boot-starter
 
-java spring boot
+```text
+打包环境
+maven 3.9.6
+graalvm java21 
+spring boot3.2.4
+
 集成微信和支付宝支付sdk<br>
 已完成微信native h5<br>
 已完成支付宝pc app h5<br>
 已完成微信jsapi<br>
+```
 
 
 ## 快速开始
