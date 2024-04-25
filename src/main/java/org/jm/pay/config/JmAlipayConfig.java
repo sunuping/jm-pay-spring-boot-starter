@@ -1,9 +1,11 @@
 package org.jm.pay.config;
 
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -11,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "jm.ali")
 @Data
+@Slf4j
 public class JmAlipayConfig {
     /**
      * 商户appid
@@ -64,7 +67,7 @@ public class JmAlipayConfig {
 
     private AlipayClient client;
 
-    public AlipayClient getClient() {
+    public AlipayClient getClient()  {
         if (client == null) {
             //构造client
             CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
@@ -86,7 +89,12 @@ public class JmAlipayConfig {
             certAlipayRequest.setAlipayPublicCertPath(this.alipayCertPath);
             //设置支付宝根证书路径
             certAlipayRequest.setRootCertPath(this.alipayRootCertPath);
-            this.client = new DefaultAlipayClient(this.gatewayUrl, this.appid, this.rsaPrivateKey, this.format, this.charset, this.alipayPublicKey, this.signType);
+            try {
+                this.client = new DefaultAlipayClient(certAlipayRequest);
+            } catch (AlipayApiException e) {
+                log.error(e.getMessage(),e);
+                throw new RuntimeException(e);
+            }
         }
         return client;
     }

@@ -8,6 +8,8 @@ import org.jm.pay.bean.pay.JmPayParam;
 import org.jm.pay.bean.pay.JmPayVO;
 import org.jm.pay.bean.query.JmOrderQueryParam;
 import org.jm.pay.bean.query.JmOrderQueryVO;
+import org.jm.pay.bean.transfer.JmTransferParam;
+import org.jm.pay.bean.transfer.JmTransferVO;
 import org.jm.pay.config.JmWxConfig;
 import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmWxPay;
@@ -91,5 +93,11 @@ public class JmWxPayJsapi implements JmWxPay {
             this.initConfig();
         }
         return this.service;
+    }
+
+
+    @Override
+    public JmTransferVO transfer(JmTransferParam param) {
+        return null;
     }
 }
