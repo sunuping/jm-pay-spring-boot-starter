@@ -21,17 +21,12 @@ public class JmWxFactory extends JmPayAbstractFactory {
 
     @Override
     public JmWxPay getJmWxPay(String jmPayType, JmWxConfig jmWxConfig) {
-        switch (jmPayType) {
-            case JmWxPayTypeConstant.WX_H5:
-                return new JmWxPayH5(jmWxConfig);
-            case JmWxPayTypeConstant.WX_PC:
-                return new JmWxPayPc(jmWxConfig);
-            case JmWxPayTypeConstant.WX_NATIVE:
-                return new JmWxPayNative(jmWxConfig);
-            case JmWxPayTypeConstant.WX_JSAPI:
-                return new JmWxPayJsapi(jmWxConfig);
-            default:
-                return null;
-        }
+        return switch (jmPayType) {
+            case JmWxPayTypeConstant.WX_H5 -> new JmWxPayH5(jmWxConfig);
+            case JmWxPayTypeConstant.WX_PC -> new JmWxPayPc(jmWxConfig);
+            case JmWxPayTypeConstant.WX_NATIVE -> new JmWxPayNative(jmWxConfig);
+            case JmWxPayTypeConstant.WX_JSAPI -> new JmWxPayJsapi(jmWxConfig);
+            default -> null;
+        };
     }
 }

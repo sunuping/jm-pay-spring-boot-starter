@@ -12,6 +12,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * @author sunup
+ */
 public class AesUtil {
 
     static final int KEY_LENGTH_BYTE = 32;

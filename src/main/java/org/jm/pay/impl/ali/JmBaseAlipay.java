@@ -56,7 +56,7 @@ public class JmBaseAlipay implements JmAlipay {
             };
         } catch (AlipayApiException e) {
             log.error("", e);
-            return new JmOrderQueryVO();
+            return new JmOrderQueryVO().setOrderStatus(JmPayStatusConstant.ALREADY_EXPIRE);
         }
     }
 

@@ -7,14 +7,11 @@ import org.jm.pay.constant.JmPayTypeConstant;
  */
 public class JmPayFactoryProducer {
     public static JmPayAbstractFactory getFactory(String payType) {
-        switch (payType) {
-            case JmPayTypeConstant.WX_PAY:
-                return new JmWxFactory();
-            case JmPayTypeConstant.ALIPAY:
-                return new JmAlipayFactory();
-            default:
-                return null;
-        }
+        return switch (payType) {
+            case JmPayTypeConstant.WX_PAY -> new JmWxFactory();
+            case JmPayTypeConstant.ALIPAY -> new JmAlipayFactory();
+            default -> null;
+        };
     }
 
 

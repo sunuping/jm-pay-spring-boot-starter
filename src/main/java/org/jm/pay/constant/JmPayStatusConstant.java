@@ -17,6 +17,11 @@ public class JmPayStatusConstant {
      */
     public static final int NOT_PAY = -1;
 
+    /**
+     * 已过期 或者交易不存在
+     */
+    public static final int ALREADY_EXPIRE = 2;
+
     private JmPayStatusConstant() {
     }
 }

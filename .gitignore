@@ -1,4 +1,4 @@
 /target/
 /.idea/
 /src/main/java/org/jm/pay/config/
-/src/main/resources/application.yml
+/src/test/resources/application.yml
