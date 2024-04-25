@@ -5,6 +5,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayParam;
 import org.jm.pay.bean.pay.JmPayVO;
@@ -14,6 +15,7 @@ import org.jm.pay.i.JmAlipay;
 /**
  * @author kong
  */
+@Getter
 @Slf4j
 public class JmAlipayApp extends JmBaseAlipay implements JmAlipay {
     private final JmAlipayConfig config;
@@ -43,7 +45,4 @@ public class JmAlipayApp extends JmBaseAlipay implements JmAlipay {
         }
     }
 
-    public JmAlipayConfig getConfig() {
-        return config;
-    }
 }
