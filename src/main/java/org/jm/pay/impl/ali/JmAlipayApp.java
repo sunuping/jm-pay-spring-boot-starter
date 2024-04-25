@@ -43,4 +43,7 @@ public class JmAlipayApp extends JmBaseAlipay implements JmAlipay {
         }
     }
 
+    public JmAlipayConfig getConfig() {
+        return config;
+    }
 }
