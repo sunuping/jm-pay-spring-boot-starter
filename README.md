@@ -10,6 +10,9 @@ spring boot3.2.4
 已完成微信native h5<br>
 已完成支付宝pc app h5<br>
 已完成微信jsapi<br>
+已完成支付宝转账
+已完成支付宝证书配置
+已完成支付宝app支付
 ```
 
 
@@ -20,22 +23,25 @@ spring boot3.2.4
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>4.39.40.ALL</version>
+            <version>4.39.52.ALL</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-java</artifactId>
             <version>0.2.12</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-apache-httpclient</artifactId>
             <version>0.4.9</version>
         </dependency>
+
         <dependency>
             <groupId>org.jm</groupId>
             <artifactId>jm-pay-spring-boot-starter</artifactId>
-            <version>4.0.2</version>
+            <version>4.0.7</version>
         </dependency>
 
 ```
@@ -52,6 +58,12 @@ jm:
     format: json
     alipay-publicKey: xxx
     sign-type: RSA2
+    #应用公钥证书路径
+    app-cert-path: 应用公钥证书路径
+    #支付宝公钥证书路径
+    alipay-cert-path: 支付宝公钥证书路径
+    #支付宝根证书路径
+    alipay-root-cert-path: 支付宝根证书路径
   wx:
     api-v3-key: xxx
     private-key-path: E:\xxxx\apiclient_key.pem
