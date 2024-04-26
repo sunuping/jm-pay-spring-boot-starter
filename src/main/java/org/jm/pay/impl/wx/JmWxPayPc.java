@@ -13,10 +13,8 @@ import org.jm.pay.i.JmWxPay;
  * @author kong
  */
 public class JmWxPayPc implements JmWxPay {
-    private final JmWxConfig config;
 
     public JmWxPayPc(JmWxConfig config) {
-        this.config = config;
     }
 
     @Override

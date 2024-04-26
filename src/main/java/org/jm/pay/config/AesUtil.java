@@ -4,7 +4,6 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -29,7 +28,7 @@ public class AesUtil {
     }
 
     public String decryptToString(byte[] associatedData, byte[] nonce, String ciphertext)
-            throws GeneralSecurityException, IOException {
+            throws GeneralSecurityException {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 

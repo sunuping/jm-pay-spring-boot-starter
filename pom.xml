@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.jm</groupId>
     <artifactId>jm-pay-spring-boot-starter</artifactId>
-    <version>4.0.6</version>
+    <version>4.0.7</version>
     <name>jm-pay-spring-boot-starter</name>
     <description>jm-pay-spring-boot-starter</description>
     <properties>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>4.39.40.ALL</version>
+            <version>4.39.52.ALL</version>
         </dependency>
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>

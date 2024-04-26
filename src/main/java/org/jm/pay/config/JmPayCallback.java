@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayCallbackVO;
 import org.jm.pay.constant.JmPayPlatformConstant;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class JmPayCallback {
         String decryptResource;
         try {
             decryptResource = aesUtil.decryptToString(associatedData.getBytes(StandardCharsets.UTF_8), nonce.getBytes(StandardCharsets.UTF_8), ciphertext);
-        } catch (GeneralSecurityException | IOException e) {
+        } catch (GeneralSecurityException e) {
             log.error("微信支付回调数据异常", e);
             return new JmPayCallbackVO();
         }

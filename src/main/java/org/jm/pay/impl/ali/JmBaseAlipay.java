@@ -3,8 +3,12 @@ package org.jm.pay.impl.ali;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.domain.AlipayFundTransUniTransferModel;
+import com.alipay.api.domain.Participant;
+import com.alipay.api.request.AlipayFundTransUniTransferRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jm.pay.bean.pay.JmPayParam;
@@ -16,6 +20,8 @@ import org.jm.pay.bean.transfer.JmTransferVO;
 import org.jm.pay.config.JmAlipayConfig;
 import org.jm.pay.constant.JmPayStatusConstant;
 import org.jm.pay.i.JmAlipay;
+
+import java.util.Optional;
 
 /**
  * @author kong
@@ -68,7 +74,7 @@ public class JmBaseAlipay implements JmAlipay {
         JSONObject bizContent = new JSONObject();
         bizContent.put("trade_no", oid);
         request.setBizContent(bizContent.toString());
-        AlipayTradeCloseResponse response = null;
+        AlipayTradeCloseResponse response;
         try {
             response = this.config.getClient().execute(request);
             return response.isSuccess();
@@ -86,6 +92,49 @@ public class JmBaseAlipay implements JmAlipay {
 
     @Override
     public JmTransferVO transfer(JmTransferParam param) {
-        return null;
+        try {
+            AlipayFundTransUniTransferRequest request = getAlipayFundTransUniTransferRequest(param);
+            AlipayFundTransUniTransferResponse response = this.config.getClient().certificateExecute(request);
+            if (log.isDebugEnabled()) {
+                log.debug(JSON.toJSONString(response));
+            }
+            if ("SUCCESS".equals(Optional.ofNullable(response.getStatus()).orElse(""))) {
+                JmTransferVO vo = new JmTransferVO();
+                vo.setStatus(response.getStatus());
+                vo.setOrderId(response.getOrderId());
+                vo.setOutBizNo(response.getOutBizNo());
+                vo.setTransDate(response.getTransDate());
+                vo.setPayFundOrderId(response.getPayFundOrderId());
+                return vo;
+            }
+            return new JmTransferVO().setStatus("FAIL");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new JmTransferVO().setStatus("FAIL");
+        }
+
+    }
+
+    private static  AlipayFundTransUniTransferRequest getAlipayFundTransUniTransferRequest(JmTransferParam param) {
+        AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+        AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
+        // 设置转账业务的标题
+        model.setOrderTitle(param.getOrderTitle());
+        // 设置描述特定的业务场景
+        model.setBizScene("DIRECT_TRANSFER");
+        // 设置商家侧唯一订单号
+        model.setOutBizNo(param.getOid());
+        // 设置订单总金额
+        model.setTransAmount(param.getAmount().toString());
+        // 设置业务产品码
+        model.setProductCode("TRANS_ACCOUNT_NO_PWD");
+        // 设置收款方信息
+        Participant payeeInfo = new Participant();
+        payeeInfo.setIdentityType(param.getIdentityType());
+        payeeInfo.setIdentity(param.getIdentity());
+        payeeInfo.setName(param.getName());
+        model.setPayeeInfo(payeeInfo);
+        request.setBizModel(model);
+        return request;
     }
 }
