@@ -1,5 +1,6 @@
 package org.jm.pay.impl.ali;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.request.AlipayTradePagePayRequest;
@@ -46,7 +47,7 @@ public class JmAlipayPc extends JmBaseAlipay implements JmAlipay {
             return new JmPayVO().setResponse(res);
         } catch (AlipayApiException e) {
 
-            return new JmPayVO().setErr(com.alibaba.fastjson2.JSON.toJSONString(e));
+            return new JmPayVO().setErr(JSON.toJSONString(e));
         }
 
     }

@@ -46,7 +46,7 @@ public class JmBaseAlipay implements JmAlipay {
         json.put("out_trade_no", param.getOrderNo());
         request.setBizContent(json.toJSONString());
         try {
-            JSONObject res = JSON.parseObject(this.config.getClient().execute(request).getBody());
+            JSONObject res = JSON.parseObject(this.config.getClient().certificateExecute(request).getBody());
             JSONObject payRes = res.getJSONObject("alipay_trade_query_response");
             JmOrderQueryVO vo = new JmOrderQueryVO().setAlipayOrderQueryVO(res);
             return switch (payRes.getString("trade_status")) {
